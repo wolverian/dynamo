@@ -9,15 +9,12 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 )
 
 var (
 	testDB    *DB
 	testTable = "TestDB"
 )
-
-var dummyCreds = credentials.NewStaticCredentialsProvider("dummy", "dummy", "")
 
 const offlineSkipMsg = "DYNAMO_TEST_REGION not set"
 

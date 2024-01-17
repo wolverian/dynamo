@@ -10,7 +10,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/smithy-go"
 	"github.com/aws/smithy-go/logging"
 	"github.com/guregu/dynamo/dynamodbiface"
@@ -18,10 +17,8 @@ import (
 
 // DB is a DynamoDB client.
 type DB struct {
-	client   dynamodbiface.DynamoDBAPI
-	logger   logging.Logger
-	retryer  request.Retryer
-	retryMax int
+	client dynamodbiface.DynamoDBAPI
+	logger logging.Logger
 }
 
 // New creates a new client with the given configuration.
@@ -60,21 +57,13 @@ func NewFromIface(client dynamodbiface.DynamoDBAPI) *DB {
 
 func newDB(client dynamodbiface.DynamoDBAPI, cfg *aws.Config) *DB {
 	db := &DB{
-		client:   client,
-		logger:   cfg.Logger,
-		retryMax: -1,
+		client: client,
+		logger: cfg.Logger,
 	}
 
 	if db.logger == nil {
 		db.logger = logging.NewStandardLogger(os.Stdout)
 	}
-
-	// TODO: FIX vvvvvv
-	// if retryer, ok := cfg.Retryer.(request.Retryer); ok {
-	// 	db.retryer = retryer
-	// } else if cfg.MaxRetries != nil {
-	// 	db.retryMax = *cfg.MaxRetries
-	// }
 
 	return db
 }

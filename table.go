@@ -73,28 +73,24 @@ func (table Table) WaitWithContext(ctx context.Context, want ...Status) error {
 		}
 	}
 
-	err := table.db.retry(ctx, func() error {
-		desc, err := table.Describe().RunWithContext(ctx)
-		var aerr smithy.APIError
-		if errors.As(err, &aerr) {
-			if aerr.ErrorCode() == "ResourceNotFoundException" {
-				if wantGone {
-					return nil
-				}
-				return errRetry
-			}
-		}
-		if err != nil {
-			return err
-		}
-
-		for _, status := range want {
-			if status == desc.Status {
+	desc, err := table.Describe().RunWithContext(ctx)
+	var aerr smithy.APIError
+	if errors.As(err, &aerr) {
+		if aerr.ErrorCode() == "ResourceNotFoundException" {
+			if wantGone {
 				return nil
 			}
 		}
-		return errRetry
-	})
+	}
+	if err != nil {
+		return err
+	}
+
+	for _, status := range want {
+		if status == desc.Status {
+			return nil
+		}
+	}
 	return err
 }
 

@@ -22,13 +22,3 @@ type SSEDescription struct {
 	SSEType                        types.SSEType
 	Status                         types.SSEStatus
 }
-
-func lookupSSEType(sseType string) SSEType {
-	if sseType == string(SSETypeAES256) {
-		return SSETypeAES256
-	}
-	if sseType == string(SSETypeKMS) {
-		return SSETypeKMS
-	}
-	return ""
-}

@@ -5,7 +5,7 @@ import (
 )
 
 // TODO: enable this test
-func _TestUpdateTable(t *testing.T) {
+func TestUpdateTable(t *testing.T) {
 	if testDB == nil {
 		t.Skip(offlineSkipMsg)
 	}
